@@ -29,9 +29,6 @@ User.init({
 }, {
   sequelize,
   underscored: true,
-  defaultScope: {
-    attributes: { exclude: ['passwordHash'] },
-  },
   modelName: 'user'
 })
 

@@ -5,6 +5,7 @@ const { User, Blog } = require('../models')
 
 router.get('/', async (req, res) => {
   const users = await User.findAll({
+    attributes: { exclude: ['passwordHash']},
     include: {
       model: Blog,
       attributes: { exclude: ['userId'] }
@@ -17,9 +18,7 @@ router.post('/', async (req, res) => {
   const { username, name, password } = req.body
 
   if (!password || password.trim() < 5) {
-    const e = new Error('Password is required and must be at least 5 characters long')
-    e.name = 'PasswordError'
-    throw e
+    response.status(400).json({ error: 'Password is required and must be at least 5 characters long' })
   }
 
   const saltRounds = 10
