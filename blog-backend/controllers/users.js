@@ -5,13 +5,35 @@ const { User, Blog } = require('../models')
 
 router.get('/', async (req, res) => {
   const users = await User.findAll({
-    attributes: { exclude: ['passwordHash']},
+    attributes: { exclude: ['passwordHash'] },
     include: {
       model: Blog,
       attributes: { exclude: ['userId'] }
     }
   })
   res.json(users)
+})
+
+router.get('/:id', async (req, res) => {
+  const user = await User.findByPk(req.params.id, {
+    attributes: { exclude: ['id', 'passwordHash', 'createdAt', 'updatedAt'] },
+    include: [
+      {
+        model: Blog,
+        as: 'readings',
+        attributes: { exclude: ['userId', 'createdAt', 'updatedAt'] },
+        through: {
+          as: 'readinglists',
+          attributes: ['id', 'isRead']
+        },
+      },
+    ]
+  })
+  if (user) {
+    res.json(user)
+  } else {
+    res.status(404).end()
+  }
 })
 
 router.post('/', async (req, res) => {

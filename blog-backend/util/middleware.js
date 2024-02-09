@@ -9,19 +9,16 @@ const errorHandler = (error, request, response, next) => {
   console.log('Error Name:' + error.name)
   console.log(error.message)
 
-  if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeDatabaseError') {
-    return response.status(400).json({ error: error.message })
+  switch (error.name) {
+    case 'SequelizeForeignKeyConstraintError':
+    case 'SequelizeValidationError':
+    case 'SequelizeDatabaseError':
+    case 'SequelizeUniqueConstraintError':
+      response.status(400).json({ error: error.message })
+      break
+    default:
+      next(error)
   }
-
-  if (error.name ===  'SequelizeUniqueConstraintError') {
-    return response.status(400).json({ error: 'Username must be unique'})
-  }
-
-  if (error.name === 'TypeError') {
-    return response.status(404).json({ error: 'Resource not found' })
-  }
-
-  next(error)
 }
 
 const tokenExtractor = (req, res, next) => {
