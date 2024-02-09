@@ -16,6 +16,9 @@ const errorHandler = (error, request, response, next) => {
     case 'SequelizeUniqueConstraintError':
       response.status(400).json({ error: error.message })
       break
+    case 'TypeError':
+      response.status(400).json({ error: 'Malformed request' })
+      break
     default:
       next(error)
   }
