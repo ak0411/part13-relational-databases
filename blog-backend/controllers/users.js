@@ -48,7 +48,7 @@ router.post('/', async (req, res) => {
   const { username, name, password } = req.body
 
   if (!password || password.trim() < 5) {
-    response.status(400).json({ error: 'Password is required and must be at least 5 characters long' })
+    res.status(400).json({ error: 'Password is required and must be at least 5 characters long' })
   }
 
   const saltRounds = 10

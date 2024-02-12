@@ -35,7 +35,6 @@ router.get('/', async (req, res) => {
       ['likes', 'DESC']
     ]
   })
-  //console.log(JSON.stringify(blogs, null, 2))
   res.json(blogs)
 })
 
@@ -55,6 +54,7 @@ router.delete('/:id', blogFinder, tokenExtractor, async (req, res) => {
     if (req.blog.userId !== req.decodedToken.id) {
       return res.status(401).json({ error: 'Unauthorized' })
     }
+
     await req.blog.destroy()
   }
   res.status(204).end()
