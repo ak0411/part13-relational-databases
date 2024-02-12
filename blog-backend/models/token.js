@@ -22,6 +22,7 @@ Token.init({
 }, {
   sequelize,
   underscored: true,
+  timestamps: false,
   modelName: 'token'
 })
 
